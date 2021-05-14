@@ -27,6 +27,7 @@ public class Cuenta {
   }
 
   public void poner(double cuanto) {
+    // TODO: duplicated code
     if (cuanto <= 0) {
       throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
     }
@@ -34,11 +35,11 @@ public class Cuenta {
     if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= 3) {
       throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
     }
-
-    new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
+    this.agregateA(new Movimiento(LocalDate.now(), cuanto, true));
   }
 
   public void sacar(double cuanto) {
+    // TODO: duplicated code
     if (cuanto <= 0) {
       throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
     }
@@ -51,17 +52,16 @@ public class Cuenta {
       throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000
           + " diarios, límite: " + limite);
     }
-    new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
+    this.agregateA(new Movimiento(LocalDate.now(), cuanto, false));
   }
 
-  public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) {
-    Movimiento movimiento = new Movimiento(fecha, cuanto, esDeposito);
+  public void agregarMovimiento(Movimiento movimiento) {
     movimientos.add(movimiento);
   }
 
   public double getMontoExtraidoA(LocalDate fecha) {
     return getMovimientos().stream()
-        .filter(movimiento -> !movimiento.isDeposito() && movimiento.getFecha().equals(fecha))
+        .filter(movimiento -> !movimiento.isDeposito() && movimiento.getFecha().equals(fecha)) //TODO: cambiar a isExtraccion
         .mapToDouble(Movimiento::getMonto)
         .sum();
   }
@@ -76,6 +76,19 @@ public class Cuenta {
 
   public void setSaldo(double saldo) {
     this.saldo = saldo;
+  }
+
+  public void agregateA(Movimiento movimiento) {
+    this.actualizarSaldo(movimiento);
+    this.agregarMovimiento(movimiento);
+  }
+
+  public void actualizarSaldo(Movimiento movimiento) {
+    if (movimiento.isDeposito()) {
+      this.setSaldo(this.getSaldo() + movimiento.getMonto());
+    } else {
+      this.setSaldo(this.getSaldo() - movimiento.getMonto());
+    }
   }
 
 }
