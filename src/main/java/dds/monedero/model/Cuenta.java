@@ -71,12 +71,12 @@ public class Cuenta {
     this.saldo = saldo;
   }
 
-  public void agregateA(Movimiento movimiento) {
+  private void agregateA(Movimiento movimiento) {
     this.actualizarSaldo(movimiento);
     this.agregarMovimiento(movimiento);
   }
 
-  public void actualizarSaldo(Movimiento movimiento) {
+  private void actualizarSaldo(Movimiento movimiento) {
     if (movimiento.isDeposito()) {
       this.setSaldo(this.getSaldo() + movimiento.getMonto());
     } else {
