@@ -28,11 +28,11 @@ public class MonederoTest {
   }
 
   @Test
-  void TresDepositos() {
-    cuenta.poner(1500);
+  void esValidoTresDepositos() {
+    assertDoesNotThrow(()->{cuenta.poner(1500);
     cuenta.poner(456);
-    cuenta.poner(1900);
-    // TODO: Falta assert
+    cuenta.poner(1900);});
+
   }
 
   @Test
