@@ -23,7 +23,7 @@ public class MonederoTest {
   }
 
   @Test
-  void PonerMontoNegativo() {
+  void ponerMontoNegativoException() {
     assertThrows(MontoNegativoException.class, () -> cuenta.poner(-1500));
   }
 
