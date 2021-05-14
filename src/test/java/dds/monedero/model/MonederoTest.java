@@ -7,6 +7,7 @@ import dds.monedero.exceptions.SaldoMenorException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,68 +22,68 @@ public class MonederoTest {
 
   @Test
   void ponerValorEnCuentaValido() {
-    assertDoesNotThrow(()->cuenta.poner(1500));
+    assertDoesNotThrow(()->cuenta.poner(new BigDecimal(1500)));
   }
 
   @Test
   void obtenerMovimientosDeCuenta() {
-    cuenta.poner(1500);
+    cuenta.poner(new BigDecimal(1500));
     assertEquals(1,cuenta.getMovimientos().size());
   }
   @Test
   void obtenerMontoExtraido(){
-    cuenta.poner(100);
-    cuenta.sacar(50);
-    assertEquals(50,cuenta.getMontoExtraidoA(LocalDate.now()));
+    cuenta.poner(new BigDecimal(100));
+    cuenta.sacar(new BigDecimal(50));
+    assertEquals(new BigDecimal(50),cuenta.getMontoExtraidoA(LocalDate.now()));
   }
 
   @Test
   void ponerMontoNegativoException() {
-    assertThrows(MontoNegativoException.class, () -> cuenta.poner(-1500));
+    assertThrows(MontoNegativoException.class, () -> cuenta.poner(new BigDecimal(-1500)));
   }
 
   @Test
   void esValidoTresDepositos() {
-    assertDoesNotThrow(()->{cuenta.poner(1500);
-    cuenta.poner(456);
-    cuenta.poner(1900);});
+    assertDoesNotThrow(()->{cuenta.poner(new BigDecimal(1500));
+    cuenta.poner(new BigDecimal(456));
+    cuenta.poner(new BigDecimal(1900));});
 
   }
 
   @Test
   void masDeTresDepositosEsInvalido() {
     assertThrows(MaximaCantidadDepositosException.class, () -> {
-          cuenta.poner(1500);
-          cuenta.poner(456);
-          cuenta.poner(1900);
-          cuenta.poner(245);
+          cuenta.poner(new BigDecimal(1500));
+          cuenta.poner(new BigDecimal(456));
+          cuenta.poner(new BigDecimal(1900));
+          cuenta.poner(new BigDecimal(245));
     });
   }
 
   @Test
   void extraerMontoValido(){
-    cuenta.poner(100);
-    assertDoesNotThrow(()->cuenta.sacar(50));
+    cuenta.poner(new BigDecimal(100));
+    assertDoesNotThrow(()->cuenta.sacar(new BigDecimal(50)));
   }
   @Test
   void extraerMasQueElSaldoEsInvalido() {
     assertThrows(SaldoMenorException.class, () -> {
-          cuenta.setSaldo(90);
-          cuenta.sacar(1001);
+          cuenta.setSaldo(new BigDecimal(90));
+          cuenta.sacar(new BigDecimal(1001));
     });
   }
 
   @Test
   public void extraerMasDelLimeteDiarioEsInvalido() {
     assertThrows(MaximoExtraccionDiarioException.class, () -> {
-      cuenta.setSaldo(5000);
-      cuenta.sacar(1001);
+      cuenta.setSaldo(new BigDecimal(5000));
+      cuenta.sacar(new BigDecimal(1001));
     });
   }
 
   @Test
   public void extraerMontoNegativoEsInvalido() {
-    assertThrows(MontoNegativoException.class, () -> cuenta.sacar(-500));
+    assertThrows(MontoNegativoException.class, () -> cuenta.sacar(new BigDecimal(-500)));
   }
 
 }
