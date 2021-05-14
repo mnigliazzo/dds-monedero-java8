@@ -62,7 +62,7 @@ public class MonederoTest {
   }
 
   @Test
-  public void ExtraerMontoNegativo() {
+  public void extraerMontoNegativoEsInvalido() {
     assertThrows(MontoNegativoException.class, () -> cuenta.sacar(-500));
   }
 
