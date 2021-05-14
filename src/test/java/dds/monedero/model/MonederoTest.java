@@ -23,6 +23,12 @@ public class MonederoTest {
   }
 
   @Test
+  void obtenerMovimientosDeCuenta() {
+    cuenta.poner(1500);
+    assertEquals(1,cuenta.getMovimientos().size());
+  }
+
+  @Test
   void ponerMontoNegativoException() {
     assertThrows(MontoNegativoException.class, () -> cuenta.poner(-1500));
   }
