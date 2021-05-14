@@ -60,6 +60,11 @@ public class MonederoTest {
   }
 
   @Test
+  void extraerMontoValido(){
+    cuenta.poner(100);
+    assertDoesNotThrow(()->cuenta.sacar(50));
+  }
+  @Test
   void extraerMasQueElSaldoEsInvalido() {
     assertThrows(SaldoMenorException.class, () -> {
           cuenta.setSaldo(90);
